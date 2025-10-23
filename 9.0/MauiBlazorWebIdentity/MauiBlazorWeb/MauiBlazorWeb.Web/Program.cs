@@ -30,8 +30,9 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// Use SQLite for local development to avoid requiring SQL Server / LocalDB
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlite(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //Needed for external clients to log in
@@ -50,11 +51,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // Apply migrations & create database if needed at startup
+    // Create database if needed at startup. For SQLite we use EnsureCreated to avoid
+    // running SQL Server-specific migrations that may exist in this sample.
     using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.Migrate();
+        dbContext.Database.EnsureCreated();
     }
     app.UseMigrationsEndPoint();
     app.MapOpenApi();

@@ -1,0 +1,8 @@
+# Build
+dotnet restore
+dotnet build c:\Data\Projects\dotnet\blazor-samples\9.0\MauiBlazorWebIdentity\MauiBlazorWeb\MauiBlazorWeb.Web\MauiBlazorWeb.Web.csproj
+
+# Run the web app (starts on http://localhost:5002 in my run)
+dotnet run --project "c:\Data\Projects\dotnet\blazor-samples\9.0\MauiBlazorWebIdentity\MauiBlazorWeb\MauiBlazorWeb.Web\MauiBlazorWeb.Web.csproj" --urls http://localhost:5002
+
+dotnet run --project "c:\Data\Projects\dotnet\blazor-samples\9.0\MauiBlazorWebIdentity\MauiBlazorWeb\MauiBlazorWeb.Web\MauiBlazorWeb.Web.csproj" --no-build --urls http://localhost:5002
